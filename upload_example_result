@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Demo CodeIgniter Upload And ReSize Image Maintain Ratio</title>
+</head>
+<body>
+<?php
+	if(isset($upload_error))
+		echo $upload_error;
+	else
+	{
+?>
+<p>
+Please see the thumbnail and your orginal file.<br>
+We will schedule to delete all upload files.<br>
+<a href='http://4rapiddev.com' target='_blank'>4rapiddev.com</a>
+</p>
+<strong>Thumbnail:</strong>
+<p><img src="<?php echo $file_name_thumb_url;?>" /></p>
+
+<strong>Middle:</strong>
+<p><img src="<?php echo $file_name_middle_url;?>" /></p>
+ 
+<strong>Original:</strong>
+<p><img src="<?php echo $file_name_url;?>" /></p>
+<?php
+	}
+?>
+</body>
+</html>
