@@ -1,0 +1,79 @@
+/****controller*****/
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+ 
+class UploadExample extends CI_Controller {
+ 
+	public function index()
+	{
+		$this->load->view('upload_example');
+	}
+ 
+	public function do_upload()
+	{
+		$data = array();
+		$file_element_name = 'userfile';
+ 
+		$user_upload_path = 'data/user_uploads/images/';
+		$user_upload_path_middle = 'data/user_uploads/images/middle/';
+ 
+		$config['upload_path'] = './' . $user_upload_path;
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']  = 1024 * 4;
+		$config['encrypt_name'] = TRUE;
+ 
+		$this->load->library('upload', $config);
+ 
+		if (!$this->upload->do_upload($file_element_name))
+		{
+			$data['upload_error'] = $this->upload->display_errors();
+		}
+		else
+		{
+			$data_upload = $this->upload->data();
+			$file_name = $data_upload["file_name"];
+			//$file_name_thumb = $data_upload['raw_name'].'_thumb' . $data_upload['file_ext'];
+			$file_name_middle = $data_upload['raw_name'].'_middle' . $data_upload['file_ext'];
+ 
+			$this->load->library('image_lib');
+			$config_resize['image_library'] = 'gd2';	
+			$config_resize['create_thumb'] = TRUE;
+			//$config_resize['thumb_marker'] = '_thumb';
+			$config_resize['maintain_ratio'] = TRUE;
+			$config_resize['master_dim'] = 'height';
+			$config_resize['quality'] = "100%";
+			$config_resize['source_image'] = './' . $user_upload_path. $file_name;
+ 
+			$config_resize['height'] = 130;
+			$config_resize['width'] = 130;
+			$this->image_lib->initialize($config_resize);
+			$this->image_lib->resize();
+			$this->image_lib->clear();
+			
+			//$this->load->library('image_lib');
+			$config_resize['image_library'] = 'gd2';	
+			$config_resize['create_thumb'] = TRUE;
+			$config_resize['maintain_ratio'] = TRUE;
+			$config_resize['master_dim'] = 'height';
+			$config_resize['quality'] = "100%";
+			$config_resize['new_image']       =  './' .$user_upload_path_middle; 
+			//$config_resize_middle['source_image'] = './' .$user_upload_path. $file_name; //'./' . $user_upload_path . $file_name;
+ 
+			$config_resize['height'] = 400;
+			$config_resize['width'] = 400;
+			$this->image_lib->initialize($config_resize);
+			$this->image_lib->resize();
+ 
+			$data["file_name_url"] = base_url() . $user_upload_path . $file_name;
+			$data["file_name_thumb_url"] = base_url() . $user_upload_path . $data_upload['raw_name'].'_thumb' . $data_upload['file_ext'];
+			$data["file_name_middle_url"] = base_url() . $user_upload_path_middle .  $data_upload['raw_name'].'_thumb' . $data_upload['file_ext'];
+		}
+ 
+		$this->load->view('upload_example_result',$data);
+	}
+ 
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->helper('url');
+	}
+}
