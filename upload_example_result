@@ -11,11 +11,6 @@
 	else
 	{
 ?>
-<p>
-Please see the thumbnail and your orginal file.<br>
-We will schedule to delete all upload files.<br>
-<a href='http://4rapiddev.com' target='_blank'>4rapiddev.com</a>
-</p>
 <strong>Thumbnail:</strong>
 <p><img src="<?php echo $file_name_thumb_url;?>" /></p>
 
